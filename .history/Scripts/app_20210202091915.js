@@ -5,7 +5,18 @@
 //Closure - limits scope leak
 
 "use strict";
-(function(core)
+
+let myClosure = (()=>{
+    console.log("Document is Ready");
+
+    let myVariable = 10;
+
+    myObject.myVariable = myVariable;
+
+  return myObject;
+})();
+
+(function()
 {
     function displayHome()
     {
@@ -76,48 +87,54 @@
 
     function displayContact()
     {
-      $("#messageArea").hide();
+        let messageArea = document.getElementById("messageArea");
+        messageArea.hidden = true;
 
-      // form validation
+        // form validation
+        let fullName = document.getElementById("fullName");
+        fullName.addEventListener("blur", function() {
+            if(fullName.value.length < 2)
+            {
+                fullName.focus();
+                fullName.select();
+                messageArea.hidden = false;
+                messageArea.className = "alert alert-danger";
+                messageArea.textContent = "Please enter an appropriate Name";
+            }
+            else
+            {
+                messageArea.removeAttribute("class");
+                messageArea.hidden = true;
+            }
+        });
 
-      $("#fullName").on("blur", function()
-      {
-        if($(this).val().length < 2)
-        {
-            $(this).trigger("focus").trigger("select");
-            $("#messageArea").show().addClass("alert alert-danger").text("Please enter an appropriate Name");
-        }
-        else
-        {
-           $("#messageArea").removeAttr("class").hide();
-        }
-      });
+        let sendButton = document.getElementById("sendButton");
+        sendButton.addEventListener("click", function(event){
+            //event.preventDefault();
+            
+            let contact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
 
-      $("#sendButton").on("click", ()=>
-      {
-        let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
-
-        if(contact.serialize())
-        {
-          localStorage.setItem((localStorage.length + 1).toString(), contact.serialize());
-        }
-      });
-
-        
-
+            if(contact.serialize())
+            {
+              localStorage.setItem((localStorage.length + 1).toString(), contact.serialize());
+            }
+           
+        });
     }
 
     function displayContactList() 
     {
       if (localStorage.length > 0) 
       {
+        let contactList = document.getElementById("contactList");
+
         let data = "";
 
         for (let index = 0; index < localStorage.length; index++) 
         {
           let contactData = localStorage.getItem((index + 1).toString());
 
-          let contact = new core.Contact();
+          let contact = new Contact();
           contact.deserialize(contactData);
 
           data += `<tr>
@@ -128,7 +145,7 @@
         </tr>`;
         }
 
-        $("#contactList").html(data);
+        contactList.innerHTML = data;
       }
     }
 
@@ -164,4 +181,4 @@
 
     window.addEventListener("load", Start);
 
-})(core || (core = {}));
+})();

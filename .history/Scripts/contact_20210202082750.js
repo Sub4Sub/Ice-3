@@ -1,9 +1,6 @@
 "use strict";
 // Contact Class
-
-(function(core)
-{
-  class Contact {
+class Contact {
     // getters and setters
     get FullName() 
     {
@@ -106,11 +103,4 @@
       this.ContactNumber = propertyArray[1];
       this.EmailAddress = propertyArray[2];
     }
-
-
   }
-
-  core.Contact = Contact;
-
-})(core || (core = {}));
-  

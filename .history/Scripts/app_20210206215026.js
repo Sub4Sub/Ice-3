@@ -111,13 +111,15 @@
     {
       if (localStorage.length > 0) 
       {
+        let contactList = document.getElementById("contactList");
+
         let data = "";
 
         for (let index = 0; index < localStorage.length; index++) 
         {
           let contactData = localStorage.getItem((index + 1).toString());
 
-          let contact = new core.Contact();
+          let contact = new Contact();
           contact.deserialize(contactData);
 
           data += `<tr>
@@ -128,7 +130,7 @@
         </tr>`;
         }
 
-        $("#contactList").html(data);
+        contactList.innerHTML = data;
       }
     }
 
@@ -163,5 +165,7 @@
     }
 
     window.addEventListener("load", Start);
+
+    core.start = Start;
 
 })(core || (core = {}));

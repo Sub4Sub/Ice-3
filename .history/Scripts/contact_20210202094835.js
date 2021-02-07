@@ -110,7 +110,7 @@
 
   }
 
-  core.Contact = Contact;
+  core.Contact = contact;
 
 })(core || (core = {}));
   

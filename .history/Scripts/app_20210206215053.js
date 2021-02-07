@@ -164,4 +164,6 @@
 
     window.addEventListener("load", Start);
 
+    core.start = Start;
+
 })(core || (core = {}));

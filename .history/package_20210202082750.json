@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Demo Site for Lab 1",
   "main": "app.js",
-  "repository": "https://github.com/Sub4Sub/Ice-3.git",
-  "author": "Brett Tindall",
+  "repository": "https://github.com/durhamprogrammer/WEBD6201-W2021-ICE1b.git",
+  "author": "Tom Tsiliopoulos <tsiliopoulos@hotmail.com>",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
