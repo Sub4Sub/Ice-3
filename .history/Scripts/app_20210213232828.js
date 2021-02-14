@@ -74,71 +74,24 @@
 
     }
 
-    function testFullName()
-    {
-      let fullNamePattern = /[A-Z][a-z]+(\s|,)[A-Z][a-z]{1,50}/;
-      let messageArea = $("#messageArea").hide();
-      $("#fullName").on("blur", function()
-      {
-        if(!fullNamePattern.test($(this).val()))
-        {
-          $(this).trigger("focus").trigger("select");
-          messageArea.show().addClass("alert alert-danger").text("Please enter an appropriate Name. A first name and last name are required with a minimum length of 2 characters each.");
-        }
-        else
-        {
-            messageArea.removeAttr("class").hide();
-        }
-      });
-    }
-
-    function testContactNumber()
-    {
-      let contactNumberPattern = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
-      let messageArea = $("#messageArea");
-      $("#contactNumber").on("blur", function()
-      {
-        if(!contactNumberPattern.test($(this).val()))
-        {
-          $(this).trigger("focus").trigger("select");
-          messageArea.show().addClass("alert alert-danger").text("Please enter a valid contact number.");
-        }
-        else
-        {
-            messageArea.removeAttr("class").hide();
-        }
-      });
-
-    }
-
-    function testEmailAddress()
-    {
-      let emailAddressPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
-      let messageArea = $("#messageArea");
-      $("#emailAddress").on("blur", function()
-      {
-        if(!emailAddressPattern.test($(this).val()))
-        {
-          $(this).trigger("focus").trigger("select");
-          messageArea.show().addClass("alert alert-danger").text("Please enter a valid email address.");
-        }
-        else
-        {
-            messageArea.removeAttr("class").hide();
-        }
-      });
-    }
-
-    function formValidation()
-    {
-      testFullName();
-      testContactNumber();
-      testEmailAddress();
-    }
-
     function displayContact()
     {
-      formValidation();
+      $("#messageArea").hide();
+
+      // form validation
+
+      $("#fullName").on("blur", function()
+      {
+        if($(this).val().length < 2)
+        {
+            $(this).trigger("focus").trigger("select");
+            $("#messageArea").show().addClass("alert alert-danger").text("Please enter an appropriate Name");
+        }
+        else
+        {
+           $("#messageArea").removeAttr("class").hide();
+        }
+      });
 
       $("#sendButton").on("click", ()=>
       {
@@ -161,7 +114,8 @@
         let contactList = document.getElementById("contactList");
 
         let data = "";
-        let index = 1; 
+        let index = 1; // sentinel variable
+        // returns an array of keys from localStorage
         let keys = Object.keys(localStorage);
         for (const key of keys) {
           let contactData = localStorage.getItem(key);
@@ -194,7 +148,7 @@
            {
             localStorage.removeItem($(this).val());
            }
-           location.href = "contact-list.html";
+           location.href = "contact-list.html"; // refresh the page
          });
 
          $("#addButton").on("click", function()
@@ -204,73 +158,7 @@
       }
     }
 
-    function displayEdit()
-    {
-      let key = location.hash.substring(1);
-      let contact = new core.Contact();
-
-      // check to ensure that the key is not empty
-      if(key != "")
-      {
-        
-        // get contact info from localStorage
-        contact.deserialize(localStorage.getItem(key));
-
-        // display contact information in the form
-        $("#fullName").val(contact.FullName);
-        $("#contactNumber").val(contact.ContactNumber);
-        $("#emailAddress").val(contact.EmailAddress);
-      }
-      else
-      {
-        // modify the page so that it shows "Add Contact" in the header
-        $("main>h1").text("Add Contact");
-
-        // modify the edit button so that it shows "Add" as well as the appropriate icon
-        $("#editButton").html(`<i class="fas fa-plus-circle fa-lg"></i> Add`);
-      }
-
-      // form validation
-      formValidation();
-
-      $("#editButton").on("click", function() 
-      {
-
-        if(key == "")
-        {
-          // create a new key based on the First initial of the FullName and the Date.now() in ms
-          key = contact.FullName.substring(0, 1) + Date.now();
-        }
-
-        // copy contact info from the form to the contact object
-        contact.FullName =  $("#fullName").val();
-        contact.ContactNumber = $("#contactNumber").val();
-        contact.EmailAddress = $("#emailAddress").val();
-
-        // add or edit the contact ifo in localStorage
-        localStorage.setItem(key, contact.serialize());
-
-        // return to the contact-list page
-        location.href = "contact-list.html";
-      });
-
-      $("#cancelButton").on("click", function()
-      {
-        // return to the contact-list page
-        location.href = "contact-list.html";
-      });
-      
-    }
-
-    function displayLogin()
-    {
-
-    }
-
-    function displayRegister()
-    {
-
-    }
+     
 
     function Start()
     {
@@ -295,15 +183,6 @@
             break;
           case "Contact-List":
             displayContactList();
-          break;
-          case "Edit":
-            displayEdit();
-            break;
-          case "Login":
-            displayLogin();
-          break;
-          case "Register":
-            displayRegister();
           break;
         }
         

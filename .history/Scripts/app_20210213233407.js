@@ -262,16 +262,6 @@
       
     }
 
-    function displayLogin()
-    {
-
-    }
-
-    function displayRegister()
-    {
-
-    }
-
     function Start()
     {
         console.log("App Started...");
